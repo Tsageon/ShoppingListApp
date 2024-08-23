@@ -1,24 +1,23 @@
 body {
   font-family: Arial, sans-serif;
   background-color: whitesmoke;
-  margin: 0;
-  padding: 20px;
-}
+  margin: auto;
+  padding: auto;}
 
 h1 {
   text-align: center;
   color: #343a40;}
 
 div {
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 500px;
+  margin: 0px auto;
   padding: 20px;
   background-color: white;
-  border-radius: 20px;} 
+  border-radius: 40px;}
 
 input {
   width: 70%;
-  padding: 10px;
+  padding: 20px;
   margin-right: 10px;
   border: 1px solid #ced4da;
   border-radius: 10px;
@@ -34,28 +33,25 @@ button {
   cursor: pointer;}
 
 button:hover {
-  background-color: #0056b3;
-}
+  background-color: #0056b3;}
 
 ul {
   list-style-type: none;
-  padding: 10px;
-}
+  padding: 10px;}
 
 li {
   display: flex;
+  gap:10px;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  margin: 5px 0px;
-  background-color: #e9ecef;}
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin: 10px auto;
+  background-color: whitesmoke;}
 
 li button {
-  background-color: #dc3545;
-}
+  background-color: blue;}
 
 li button:hover {
-  background-color: #c82333;
-}
+  background-color: red;}
