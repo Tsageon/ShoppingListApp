@@ -61,7 +61,7 @@
   }
   
   .notes-textarea {
-    height: 80px;}
+    height: 40px;}
   
   .update-button {
     background-color: gray;
@@ -70,8 +70,8 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
-  }
+    margin-right: 10px;}
+
   .add-button{
     display: flex;
     background-color: gray;
