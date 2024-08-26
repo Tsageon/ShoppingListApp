@@ -1,0 +1,123 @@
+.shopping-list-container {
+    
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: lightgray;
+    border-radius: 10px;
+    box-shadow: 0 0 100px whitesmoke;}
+  
+  .shopping-list-title {
+    font-size: 24px;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 40px;}
+  
+  .search-container {
+    display: flex;
+    width: 700px;
+    align-items: center;
+    margin-bottom: 20px;}
+  
+  .search-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 40px;}
+  
+  .search-button {
+    background-color: gray;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;}
+  
+  .search-button:hover {
+    background-color: #0056b3;}
+  
+  .form-container, .edit-form-container {
+    margin-bottom: 20px;}
+  
+  .item-input, .quantity-input,.category-input, .category-select {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;}
+    
+    .notes-textarea{
+        height: auto;
+        width: 60%;
+        border-radius: 10px;
+    }
+  
+  .item-input, .category-input {
+    font-size: 16px;}
+  
+  .quantity-input, .category-select {
+    font-size: 14px;
+  }
+  
+  .notes-textarea {
+    height: 80px;}
+  
+  .update-button {
+    background-color: gray;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .add-button{
+    display: flex;
+    background-color: gray;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;}
+  
+  .add-button:hover, .update-button:hover {
+    background-color: #0056b3;}
+  
+  .error {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  .item-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .item-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .item-text {
+    flex: 1;
+  }
+  
+  .item-text.checked {
+    text-decoration: line-through;
+    color: #6c757d;
+  }
+  
+  .toggle-check-button,.edit-button,.delete-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px;}
+  
+  .toggle-check-button:hover, .edit-button:hover, .delete-button:hover {
+    color: #0056b3;}
+  
