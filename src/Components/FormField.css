@@ -1,0 +1,24 @@
+.form-field {
+    margin-bottom: 20px;
+  }
+  
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .error {
+    color: #dc3545;
+    font-weight: bold;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  

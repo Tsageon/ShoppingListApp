@@ -1,0 +1,73 @@
+.item-card {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: whitesmoke;
+    position: relative;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  
+  .item-card:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .item-details {
+    flex-grow: 1;
+  }
+  
+  .item-text {
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .item-text:hover {
+    color: #333;
+  }
+  
+  .checked {
+    text-decoration: line-through;
+    color: black;
+  }
+  
+  .item-quantity, .item-notes, .item-remaining {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  
+  .quantity-icon {
+    font-size: 15px;
+    color: #000;
+    margin-right: 5px;
+  }
+  
+  .item-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .toggle-check-button, .edit-button, .delete-button {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .toggle-check-button:hover, .edit-button:hover, .delete-button:hover {
+    background-color: #f0f0f0;
+  }
+  
