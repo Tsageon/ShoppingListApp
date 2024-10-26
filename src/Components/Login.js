@@ -1,24 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { login} from '../redux/authSlice';
 import './Auth.css';
+import Logo from '../shopping-cart.png';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const authLoading = useSelector(state => state.auth.authLoading);
+  const error = useSelector(state => state.auth.error);
+  const currentUser = useSelector(state => state.auth.currentUser);
+
+  useEffect(() => {
+    console.log('Current user in effect:', currentUser);
+    console.log('Error in effect:', error);
+    if (currentUser) {
+      navigate('/shoppinglist');
+    } else if (error) {
+      setLocalError(error);
+    }
+  }, [currentUser, error, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setLocalError(error); 
+    }
+  }, [error]);
 
   const handleLogin = () => {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(user => user.username === username && user.password === password);
-
-    if (user) {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      navigate('/shoppingList');
-    } else {
-      setError('Invalid username or password.');
+    console.log('Handling login with:', email, password); 
+    if (!email || !password) {
+      setLocalError('Enter Both Email and Password.'); 
+      return;
     }
-  };
+    dispatch(login(email, password)); 
+  };  
 
   const handleRegisterRedirect = () => {
     navigate('/register');
@@ -26,25 +46,20 @@ function Login() {
 
   return (
     <div className="auth-container">
+      <img src={Logo} alt='DaLogo' className='Logo'/>
       <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="auth-input"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="auth-input"/>
-      {error && <p className="auth-error">{error}</p>}
-      <button onClick={handleLogin} className="auth-button">Login</button>
-      <button onClick={handleRegisterRedirect} className="register-button">
-      <b><i>Register here</i></b>
-      </button>
+      <input type="email" placeholder="Email" className="auth-input" 
+        value={email} onChange={(e) => setEmail(e.target.value)}/> 
+      <input type="password" placeholder="Password" className="auth-input"
+        value={password} onChange={(e) => setPassword(e.target.value)}/>
+      {localError && <p className="auth-error">{localError}</p>}
+      <div className='buttons'>
+        <button className='auth-button' onClick={handleLogin} disabled={authLoading}>
+        {authLoading ? 'Loading...' : 'Login'}</button>
+        <button onClick={handleRegisterRedirect} className="login-button">
+          <b>Already have an account? <i>Register here</i></b>
+        </button>
+      </div>
     </div>
   );
 }

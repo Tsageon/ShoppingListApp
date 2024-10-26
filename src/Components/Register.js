@@ -1,69 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { register } from '../redux/authSlice';
 import './Auth.css';
+import Logo from '../shopping-cart.png';
 
 function Register() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState(''); 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const error = useSelector(state => state.auth.error);
+  const currentUser = useSelector(state => state.auth.currentUser);
 
   const handleRegister = () => {
-    if (!username || !password) {
-      setError('Please fill out all fields.');
-      return;
-    }
-
+    console.log('Handling register with:', email, password);
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setLocalError('Passwords Do Not Match.');
       return;
     }
-
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const userExists = users.some(user => user.username === username);
-
-    if (userExists) {
-      setError('Username already exists.');
-    } else {
-      users.push({ username, password });
-      localStorage.setItem('users', JSON.stringify(users));
-      navigate('/');
+    if (!email || !password) {
+      setLocalError('Please Fill In All Fields.'); 
+      return;
     }
+    dispatch(register(email, password));
   };
-
-  const handleLoginRedirect = () => {
-    navigate('/');
-  };
-
+  
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/login'); 
+    } else if (error) {
+      setLocalError(error);
+    }
+  }, [currentUser, error, navigate]);
+  
   return (
     <div className="auth-container">
+      <img src={Logo} alt="DaLogo" className="Logo"/>
       <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+      <input 
+        type="email"
+        placeholder="Email"
         className="auth-input"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
-      <input
-        type="password"
+      <input 
+        className="auth-input" 
+        type="password" 
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="auth-input"
       />
-      <input
-        type="password"
+      <input 
+        type="password" 
         placeholder="Confirm Password"
-        value={confirmPassword}
+        value={confirmPassword} 
         onChange={(e) => setConfirmPassword(e.target.value)}
         className="auth-input"
       />
-      {error && <p className="auth-error">{error}</p>}
+      {localError && <p className="auth-error">{localError}</p>}
       <button onClick={handleRegister} className="auth-button">Register</button>
-      <button onClick={handleLoginRedirect} className="login-button">
-      <b><i>Login here</i></b>
+      <button onClick={() => navigate('/login')} className="login-button">
+        <b>Already have an account? <i>Login here</i></b>
       </button>
     </div>
   );

@@ -1,55 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const shoppingListSlice = createSlice({
+const initialState = {
+  lists: JSON.parse(localStorage.getItem('shoppingLists')) || [], 
+};
+
+const shoppinglistSlice = createSlice({
   name: 'shoppingList',
-  initialState: {
-    lists: [],
-  },
+  initialState,
   reducers: {
+    addList: (state, action) => {
+      state.lists.push(action.payload);
+      localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
+    },
     addItem: (state, action) => {
       const { listId, item } = action.payload;
-      const list = state.lists.find(l => l.id === listId);
+      const list = state.lists.find((l) => l.id === listId);
       if (list) {
         list.items.push(item);
-      }},
-      
+        localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
+      }
+    },
     removeItem: (state, action) => {
       const { listId, itemId } = action.payload;
-      const list = state.lists.find(l => l.id === listId);
+      const list = state.lists.find((l) => l.id === listId);
       if (list) {
-        list.items = list.items.filter(item => item.id !== itemId);
-      }},
+        list.items = list.items.filter((item) => item.id !== itemId);
+        localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
+      }
+    },
     updateItem: (state, action) => {
       const { listId, itemId, updatedItem } = action.payload;
-      const list = state.lists.find(l => l.id === listId);
+      const list = state.lists.find((l) => l.id === listId);
       if (list) {
-        const index = list.items.findIndex(item => item.id === itemId);
+        const index = list.items.findIndex((item) => item.id === itemId);
         if (index !== -1) {
           list.items[index] = updatedItem;
+          localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
         }
       }
     },
     toggleChecked: (state, action) => {
       const { listId, itemId } = action.payload;
-      const list = state.lists.find(l => l.id === listId);
+      const list = state.lists.find((l) => l.id === listId);
       if (list) {
-        const item = list.items.find(item => item.id === itemId);
+        const item = list.items.find((item) => item.id === itemId);
         if (item) {
           item.checked = !item.checked;
+          localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
         }
       }
     },
-    addList: (state, action) => {
-      state.lists.push(action.payload);
-    },
-    removeList: (state, action) => {
-      state.lists = state.lists.filter(list => list.id !== action.payload);
-    },
-    setLists: (state, action) => {
+    initializeLists: (state, action) => {
       state.lists = action.payload;
     },
   },
 });
 
-export const { addItem, removeItem, updateItem, toggleChecked, addList, removeList, setLists } = shoppingListSlice.actions;
-export default shoppingListSlice.reducer;
+export const { addList, addItem, removeItem, updateItem, toggleChecked, initializeLists } = shoppinglistSlice.actions;
+export default shoppinglistSlice.reducer;

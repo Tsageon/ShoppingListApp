@@ -53,6 +53,7 @@
     margin-right: 5px;
   }
   
+  
   .item-actions {
     display: flex;
     justify-content: space-between;
@@ -70,4 +71,3 @@
   .toggle-check-button:hover, .edit-button:hover, .delete-button:hover {
     background-color: #f0f0f0;
   }
-  
