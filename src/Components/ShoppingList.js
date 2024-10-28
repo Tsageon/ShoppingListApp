@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logout } from '../redux/authSlice';
@@ -6,6 +7,7 @@ import { shareList } from '../redux/shoppinglistSlice';
 import { FaAppleAlt,FaShoppingBasket, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
 import { addItem, removeItem, updateItem, toggleChecked, addList,initializeLists } from '../redux/shoppinglistSlice';
 import { FaPlus,FaShareAlt, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
+import PrivacyPolicy from './PrivacyPolicy';
 import './ShoppingList.css';
 
 
@@ -186,8 +188,10 @@ function ShoppingList() {
 
   return (
     <div className="shopping-list-container">
+       <Link to="/privacy" className="privacy-link">Privacy Policy</Link>
       <div className="header">
   <h3 className="shopping-list-title">Shopping List</h3>
+ 
   <button className="logout-button" onClick={handleLogout}>
     <FaSignOutAlt /> Logout
   </button>

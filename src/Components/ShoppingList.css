@@ -8,6 +8,19 @@ body {
   background-color: whitesmoke; 
 }
 
+.privacy-link {
+  color: #007bff; 
+  text-decoration: none; 
+  font-weight: bold;
+  margin-left: 20px; 
+  transition: color 0.3s ease; 
+}
+
+.privacy-link:hover {
+  color: #FFDAB9;
+  text-decoration: underline; 
+}
+
 
 .shopping-list-container {
   width: 100%; 
