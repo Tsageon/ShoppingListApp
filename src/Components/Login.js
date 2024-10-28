@@ -57,7 +57,7 @@ function Login() {
         <button className='auth-button' onClick={handleLogin} disabled={authLoading}>
         {authLoading ? 'Loading...' : 'Login'}</button>
         <button onClick={handleRegisterRedirect} className="login-button">
-          <b>Already have an account? <i>Register here</i></b>
+          <b>Don't have an Account? <i>Register here</i></b>
         </button>
       </div>
     </div>

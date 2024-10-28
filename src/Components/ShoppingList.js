@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logout } from '../redux/authSlice';
-import { FaAppleAlt, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
+import { shareList } from '../redux/shoppinglistSlice';
+import { FaAppleAlt,FaShoppingBasket, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
 import { addItem, removeItem, updateItem, toggleChecked, addList,initializeLists } from '../redux/shoppinglistSlice';
-import { FaPlus, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
+import { FaPlus,FaShareAlt, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
 import './ShoppingList.css';
 
 
@@ -24,16 +25,19 @@ const categoryIcons = {
   Bakery: <FaBreadSlice color="#D2691E" />,    
   Meat: <FaDrumstickBite color="#DC143C" />,   
   Cereals: <FaSeedling color="#32CD32" />,     
-  Spices: <FaPepperHot color="#FF4500" />      
+  Spices: <FaPepperHot color="#FF4500" /> ,
+  Custom: <FaShoppingBasket color="#6A5ACD" /> 
 };
 
 const categoryImages = importAll(require.context('../categoryImages', false, /\.(png|jpe?g|svg)$/));
 
 console.log('Category Images:', categoryImages);
 
-const predefinedCategories = ['Fruit', 'Vegetable', 'Dairy', 'Bakery', 'Meat', 'Cereals', 'Spices'];
+const predefinedCategories = ['Fruit', 'Vegetable', 'Dairy', 'Bakery', 'Meat', 'Cereals', 'Spices','Custom'];
 
 function ShoppingList() {
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [email, setEmail] = useState('');
   const currentUser = useSelector(state => state.auth.currentUser);
   const authLoading = useSelector(state => state.auth.loading);
   const lists = useSelector(state => state.shoppingList.lists);
@@ -53,6 +57,14 @@ function ShoppingList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [errors, setErrors] = useState({});
 
+  const listId = lists[0]?.id;
+
+  useEffect(() => {
+    if (lists.length === 0) {
+      dispatch(addList({ id: 1, items: [] }));
+    }
+  }, [lists, dispatch]);
+
   useEffect(() => {
     if (lists.length === 0) {
       dispatch(addList({ id: 1, items: [] }));
@@ -71,7 +83,7 @@ function ShoppingList() {
   
 
   console.log('Current User:', currentUser);
-  console.log('Auth Loading:', authLoading);
+
 
   useEffect(() => {
     const storedLists = JSON.parse(localStorage.getItem('shoppingLists'));
@@ -93,6 +105,16 @@ function ShoppingList() {
       setFormState(prev => ({ ...prev, isCustomCategory: value === 'custom' }));
     }
   };
+
+  const handleShare = () => {
+    if (email && listId) {
+      dispatch(shareList({ listId, email }));
+      setEmail(''); 
+    } else {
+      alert('Please enter a valid email address.');
+    }
+  };
+  
 
   const validate = () => {
     const newErrors = {};
@@ -151,10 +173,16 @@ function ShoppingList() {
 
   const filteredItems = lists[0]?.items.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (!formState.category || item.category.toLowerCase() === formState.category.toLowerCase())
+    (
+      selectedCategory 
+        ? selectedCategory === 'Custom'
+          ? !predefinedCategories.slice(0, -1).includes(item.category) // Exclude Custom itself from check
+          : item.category.toLowerCase() === selectedCategory.toLowerCase()
+        : true 
+    )
   ) || [];
-
-  if (authLoading) return <div>Loading...</div>;
+  
+  
 
   return (
     <div className="shopping-list-container">
@@ -236,49 +264,81 @@ function ShoppingList() {
           <FaPlus /> {formState.editItemId ? 'Update Item' : 'Add Item'}
         </button>
       </div>
+      <div className="category-filter">
+      <button 
+    className={`category-button ${!selectedCategory ? 'active' : ''}`} 
+    onClick={() => setSelectedCategory('')}
+  >
+    All
+  </button>
+  {predefinedCategories.map(category => (
+    <button 
+      key={category} 
+      className={`category-button ${selectedCategory === category ? 'active' : ''}`} 
+      onClick={() => setSelectedCategory(category)}
+    >
+      {category}
+    </button>
+  ))}
+</div>
+
+<div className="share-section">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter email to share"
+      />
+      <button onClick={handleShare} className="share-button">
+        Share List
+      </button>
+    </div>
 
    
-     {filteredItems.length > 0 && (
-      <table className="item-table">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Item Name</th>
-            <th>Quantity</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredItems.map(item => (
-            <tr key={item.id} className={item.checked ? 'checked-row' : 'unchecked-row'}>
-            <td>
-  {categoryIcons[item.category] || categoryIcons['Custom']}
-</td>
-
-              <td>{item.name}</td>
-              <td>
-  {Array.from({ length: item.quantity }).map((_, index) => (
-    <FaCube key={index} className="quantity-icon" />
-  ))}
-</td>
-              <td>
-                <button onClick={() => handleToggleChecked(item.id)}>
-                  {item.checked ? <FaUndo /> : <FaCheck />}
-                </button>
-                <button onClick={() => setFormState({ ...formState, ...item, editItemId: item.id })}>
-                  <FaEdit />
-                </button>
-                <button onClick={() => handleRemove(item.id)}>
-                  <FaTrash />
-                </button>
-              </td>
+{filteredItems.length > 0 ? (
+        <table className="item-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Item Name</th>
+              <th>Quantity</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-  </div>
-);
+          </thead>
+          <tbody>
+            {filteredItems.map(item => (
+              <tr key={item.id} className={item.checked ? 'checked-row' : 'unchecked-row'}>
+                <td>{categoryIcons[item.category] || categoryIcons['Custom']}</td>
+                <td>{item.name}</td>
+                <td>
+                  {Array.from({ length: item.quantity }).map((_, index) => (
+                    <FaCube key={index} className="quantity-icon" />
+                  ))}
+                </td>
+                <td>
+                  <button onClick={() => handleToggleChecked(item.id)}>
+                    {item.checked ? <FaUndo /> : <FaCheck />}
+                  </button>
+                  <button onClick={() => setFormState({ ...formState, ...item, editItemId: item.id })}>
+                    <FaEdit />
+                  </button>
+                  <button onClick={() => handleRemove(item.id)}>
+                    <FaTrash />
+                  </button>
+                  <button onClick={() => handleShare(item.id)} title="Share">
+            <FaShareAlt />
+          </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        selectedCategory && <p className="no-items-message">Nothing in this category yet.</p>
+      )}
+    </div>
+  );
 }
+
 
 export default ShoppingList;

@@ -1,20 +1,19 @@
-
 body {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center; 
-  min-height: 100vh; 
+  min-height: 110vh; 
   margin: 0; 
   background-color: whitesmoke; 
 }
 
 
 .shopping-list-container {
-  width: 90%; 
-  max-width: 150rem;
+  width: 100%; 
   padding: 1.2rem;
   margin-left: 20%;
-  background-color: lightgray;
+  background-color: rgb(16, 55, 92);
   border-radius: 10px;
   box-shadow: 0 0 10rem whitesmoke;
 }
@@ -33,7 +32,7 @@ body {
   font-size: 16px;}
 
 .search-button {
-  background-color: gray;
+  background-color: rgb(59, 30, 84);
   color: white;
   border: none;
   padding: 10px;
@@ -42,23 +41,55 @@ body {
   margin-left: 10px;}
 
 .search-button:hover {
-  background-color: blue;}
+  background-color: #FFDAB9;}
+
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem; 
+    margin-bottom: 1rem;
+  }
+  
+  .category-button {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    gap: 1rem;
+    flex: 1 1 auto; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(59, 30, 84); 
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .category-button:hover {
+    background-color: #FFDAB9;
+  }
+  
+  .category-button.active {
+    background-color: #FFDAB9;
+    color: white;
+  }
+  
 
 .form-container,.edit-form-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;}
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;}
 
 .item-input,.quantity-input,.category-input,.category-select,.notes-textarea {
   padding: 5px;
   border: 1px solid white;
   border-radius: 10px;
   flex-grow: 1;
-  font-size: 14px;}
+  font-size: 1rem;}
 
 .item-input,.category-input {
-  font-size: 16px;}
+  font-size: 1rem;}
 
 .quantity-input {
   font-size: 14px;}
@@ -67,11 +98,13 @@ body {
   height: 40px;}
 
 .add-button,.update-button {
-  background-color: gray;
+  display: inline-flex;
+  gap:1rem;
+  background-color: rgb(59, 30, 84);
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;}
 
 .add-button {
@@ -85,7 +118,7 @@ body {
   margin-right: 10px;}
 
 .add-button:hover,.update-button:hover {
-  background-color: blue;}
+  background-color: #FFDAB9;}
 
 .error {
   color: red;
@@ -153,7 +186,7 @@ body {
   margin-top: 10px;}
 
 .item-card:hover {
-  background-color: #e0e0e0;
+  background-color: #FFDAB9;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;}
 
@@ -170,7 +203,7 @@ body {
   margin-left: 5px;}
 
 .toggle-check-button:hover,.edit-button:hover,.delete-button:hover {
-  color: blue;}
+  color: #FFDAB9;}
 
 .item-table {
   width: 100%;
@@ -256,10 +289,11 @@ body {
 .shopping-list-title {
   flex-grow: 1;
   text-align: center; 
+  color: white;
 }
 
 .logout-button {
-  background: grey;
+  background: rgb(59, 30, 84);
   color: #fff;
   border: none;
   padding: 5px 10px; 
@@ -273,7 +307,38 @@ body {
 
 
 .logout-button:hover {
-  background: blue;
+background-color: #FFDAB9;
+
+}
+
+.share-section {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.share-section input {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  flex: 1; 
+}
+
+.share-button {
+  padding: 10px 0.9rem;
+  background-color: rgb(59, 30, 84); 
+  color: white; 
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s;
+}
+
+
+.share-button:hover {
+  background-color: #FFDAB9; 
 }
 
 @media (max-width: 768px) {
@@ -318,7 +383,7 @@ body {
   }
 
   .shopping-list-container {
-    width: 80%; 
+    width: 90%; 
   }
 
   .search-input,
@@ -342,10 +407,6 @@ body {
     font-size: 18px; 
   }
 
-  .shopping-list-container {
-    width: 70%; 
-  }
-
   .search-input,
   .search-button {
     padding: 15px; 
@@ -364,7 +425,7 @@ body {
   }
 
   .shopping-list-container {
-    width: 60%; 
+    width: 65%;
   }
 
   .item-table {

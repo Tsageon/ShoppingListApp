@@ -53,8 +53,20 @@ const shoppinglistSlice = createSlice({
     initializeLists: (state, action) => {
       state.lists = action.payload;
     },
+    shareList: (state, action) => {
+      const { listId, email } = action.payload;
+      const list = state.lists.find((l) => l.id === listId);
+      if (list) {
+        console.log(`List ${listId} shared with ${email}`);
+        if (!list.sharedWith) {
+          list.sharedWith = [];
+        }
+        list.sharedWith.push(email);
+        localStorage.setItem('shoppingLists', JSON.stringify(state.lists));
+      }
+    },
   },
 });
 
-export const { addList, addItem, removeItem, updateItem, toggleChecked, initializeLists } = shoppinglistSlice.actions;
+export const { addList, addItem, removeItem, updateItem, toggleChecked, initializeLists,shareList } = shoppinglistSlice.actions;
 export default shoppinglistSlice.reducer;
