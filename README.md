@@ -50,5 +50,10 @@ A comprehensive Shopping List App built with Redux for state management. This ap
    git clone https://github.com/Tsageon/ShoppingListApp.git
 
 2. **Install all dependencies**
-  ```bash
-  npm install
+   ```bash
+   npm install
+
+3. **Now Run the App**
+   ```bash
+   npm start
+ 
