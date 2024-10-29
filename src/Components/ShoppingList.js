@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logout } from '../redux/authSlice';
-import { shareList } from '../redux/shoppinglistSlice';
 import { FaAppleAlt,FaShoppingBasket, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
 import { addItem, removeItem, updateItem, toggleChecked, addList,initializeLists } from '../redux/shoppinglistSlice';
 import { FaPlus,FaShareAlt, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
-import PrivacyPolicy from './PrivacyPolicy';
+
 import './ShoppingList.css';
 
 
@@ -39,7 +38,7 @@ const predefinedCategories = ['Fruit', 'Vegetable', 'Dairy', 'Bakery', 'Meat', '
 
 function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [email, setEmail] = useState('');
+
   const currentUser = useSelector(state => state.auth.currentUser);
   const authLoading = useSelector(state => state.auth.loading);
   const lists = useSelector(state => state.shoppingList.lists);
@@ -109,11 +108,16 @@ function ShoppingList() {
   };
 
   const handleShare = () => {
-    if (email && listId) {
-      dispatch(shareList({ listId, email }));
-      setEmail(''); 
+    if (navigator.share) { 
+      navigator.share({
+        title: 'My Shopping List',
+        text: 'Check out my shopping list!',
+        url: window.location.href + `/list/${listId}`
+      })
+      .then(() => console.log('List shared successfully'))
+      .catch((error) => console.error('Error sharing list:', error));
     } else {
-      alert('Please enter a valid email address.');
+      alert('Web Share API is not supported on your device.');
     }
   };
   
@@ -285,18 +289,6 @@ function ShoppingList() {
     </button>
   ))}
 </div>
-
-<div className="share-section">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter email to share"
-      />
-      <button onClick={handleShare} className="share-button">
-        Share List
-      </button>
-    </div>
 
    
 {filteredItems.length > 0 ? (

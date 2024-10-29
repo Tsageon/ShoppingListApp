@@ -26,13 +26,15 @@ A comprehensive Shopping List App built with Redux for state management. This ap
 ### Sharing
 - **Share Lists**: Share shopping lists with others via email or messaging.
 ### Authentication
-- **User Authentication**: Secure access to shopping lists with user authentication, ensuring privacy and data protection.
+- **User Authentication**: Secure access to shopping lists with 
+user authentication, ensuring privacy and data protection.
 ### User Interface
 - **Intuitive UI**: A user-friendly interface with easy-to-use controls for managing shopping lists and items.
+
 ## Technologies Used
 - **Frontend**: React, Redux
 - **Offline Support**: Service Workers or Local Storage
--
+
 ## Setup
 1. **Clone the Repository**:
    ```bash
