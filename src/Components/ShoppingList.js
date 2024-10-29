@@ -6,7 +6,6 @@ import { logout } from '../redux/authSlice';
 import { FaAppleAlt,FaShoppingBasket, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
 import { addItem, removeItem, updateItem, toggleChecked, addList,initializeLists } from '../redux/shoppinglistSlice';
 import { FaPlus,FaShareAlt, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
-
 import './ShoppingList.css';
 
 
