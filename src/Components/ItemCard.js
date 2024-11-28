@@ -2,19 +2,28 @@ import React from 'react';
 import { FaEdit, FaTrash, FaCheck, FaUndo, FaCube} from 'react-icons/fa';
 import './ItemCard.css';
 import Custom from '../service.png';
+import Swal from 'sweetalert2';
 
 const ItemCard = ({
   item,
   categoryImages,
   onEdit,
   onToggleChecked,
-  onRemove
-}) => {
-  const renderQuantityIcons = (quantity) => {
-    const numQuantity = parseInt(quantity, 10);
-    if (isNaN(numQuantity) || numQuantity <= 0) {
-      return <span>Invalid quantity</span>;
-    }
+  onRemove }) => {
+
+    const renderQuantityIcons = (quantity) => {
+      const numQuantity = parseInt(quantity, 10);
+      
+      if (isNaN(numQuantity) || numQuantity <= 0) {
+        Swal.fire({
+          title: 'Invalid Quantity',
+          text: 'The quantity you entered is not valid. Please enter a valid number greater than 0.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+        
+        return <span>Invalid quantity</span>;
+      }
 
     const icons = [];
     for (let i = 0; i < numQuantity; i++) {

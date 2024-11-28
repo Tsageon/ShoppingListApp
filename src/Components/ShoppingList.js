@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logout } from '../redux/authSlice';
+import Swal from 'sweetalert2';
 import { FaAppleAlt,FaShoppingBasket, FaCarrot, FaCheese, FaBreadSlice, FaDrumstickBite, FaSeedling, FaPepperHot } from 'react-icons/fa'; 
 import { addItem, removeItem, updateItem, toggleChecked, addList,initializeLists } from '../redux/shoppinglistSlice';
 import { FaPlus,FaShareAlt, FaTrash, FaEdit, FaCheck, FaUndo, FaSearch, FaCube, FaSignOutAlt } from 'react-icons/fa'; 
@@ -37,7 +38,6 @@ const predefinedCategories = ['Fruit', 'Vegetable', 'Dairy', 'Bakery', 'Meat', '
 
 function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState('');
-
   const currentUser = useSelector(state => state.auth.currentUser);
   const authLoading = useSelector(state => state.auth.loading);
   const lists = useSelector(state => state.shoppingList.lists);
@@ -94,10 +94,22 @@ function ShoppingList() {
 
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out of your account.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Log Out',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+        navigate('/login');
+        Swal.fire('Logged Out!', 'You have been successfully logged out.', 'success');
+      }
+    });
   };
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
@@ -107,17 +119,21 @@ function ShoppingList() {
   };
 
   const handleShare = () => {
-    if (navigator.share) { 
-      navigator.share({
-        title: 'My Shopping List',
-        text: 'Check out my shopping list!',
-        url: window.location.href + `/list/${listId}`
-      })
-      .then(() => console.log('List shared successfully'))
-      .catch((error) => console.error('Error sharing list:', error));
-    } else {
-      alert('Web Share API is not supported on your device.');
+    if (!lists[0]?.items.length) {
+      Swal.fire('No items to share!', 'Your shopping list is empty.', 'info');
+      return;
     }
+  
+    const listItems = lists[0].items
+      .map((item) => `${item.name} (${item.quantity}): ${item.notes || 'No notes'}`)
+      .join('\n');
+  
+    const subject = encodeURIComponent('My Shopping List');
+    const body = encodeURIComponent(
+      `Here's my shopping list:\n\n${listItems}\n\nShared via Shopping List App!`
+    );
+  
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
   };
   
 
@@ -146,14 +162,28 @@ function ShoppingList() {
         category: formState.category,
         notes: formState.notes
       };
-      if (formState.editItemId) {
-        dispatch(updateItem({ listId: lists[0].id, itemId: formState.editItemId, updatedItem: newItem }));
-      } else {
-        dispatch(addItem({ listId: lists[0].id, item: newItem }));
-      }
-      resetForm();
+  
+      const action = formState.editItemId
+        ? updateItem({ listId: lists[0].id, itemId: formState.editItemId, updatedItem: newItem })
+        : addItem({ listId: lists[0].id, item: newItem });
+  
+      Swal.fire({
+        title: 'Are you sure?',
+        text: formState.editItemId ? 'You are about to update this item.' : 'You are about to add this item.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: formState.editItemId ? 'Yes, Update' : 'Yes, Add',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(action); 
+          resetForm(); 
+          Swal.fire('Success!', `Item has been ${formState.editItemId ? 'updated' : 'added'} successfully.`, 'success');
+        }
+      });
     }
   };
+  
 
   const resetForm = () => {
     setFormState({

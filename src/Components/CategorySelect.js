@@ -9,6 +9,7 @@ const CategorySelect = ({
   onCustomCategoryChange,
   error
 }) => {
+  
   return (
     <div className="category-select-container">
       {isCustomCategory ? (

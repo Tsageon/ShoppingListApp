@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login} from '../redux/authSlice';
+import Loader from './Loader'
+import Swal from 'sweetalert2'
 import './Auth.css';
 import Logo from '../shopping-cart.png';
 
@@ -18,31 +20,67 @@ function Login() {
   useEffect(() => {
     console.log('Current user in effect:', currentUser);
     console.log('Error in effect:', error);
+
     if (currentUser) {
       navigate('/shoppinglist');
     } else if (error) {
       setLocalError(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Error',
+        text: 'There was an issue with your login. Please try again.',
+      });
     }
   }, [currentUser, error, navigate]);
 
   useEffect(() => {
     if (error) {
-      setLocalError(error); 
+      setLocalError(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error,
+      });
     }
   }, [error]);
 
   const handleLogin = () => {
-    console.log('Handling login with:', email, password); 
+    console.log('Handling login with:', email, password);
     if (!email || !password) {
-      setLocalError('Enter Both Email and Password.'); 
+      setLocalError('Enter Both Email and Password.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Information',
+        text: 'Please enter both email and password to log in.',
+      });
       return;
     }
     dispatch(login(email, password)); 
-  };  
+    
+    Swal.fire({
+      title: 'Logging in...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+  };
 
   const handleRegisterRedirect = () => {
-    navigate('/register');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be redirected to the registration page.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, go to Register',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/register');
+      }
+    });
   };
+  
 
   return (
     <div className="auth-container">
@@ -55,7 +93,7 @@ function Login() {
       {localError && <p className="auth-error">{localError}</p>}
       <div className='buttons'>
         <button className='auth-button' onClick={handleLogin} disabled={authLoading}>
-        {authLoading ? 'Loading...' : 'Login'}</button>
+        {authLoading ? <Loader/> : 'Login'}</button>
         <button onClick={handleRegisterRedirect} className="login-button">
           <b>Don't have an Account? <i>Register here</i></b>
         </button>

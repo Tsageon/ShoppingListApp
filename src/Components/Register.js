@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../redux/authSlice';
 import './Auth.css';
+import Swal from 'sweetalert2'
 import Logo from '../shopping-cart.png';
 
 function Register() {
@@ -17,16 +18,34 @@ function Register() {
 
   const handleRegister = () => {
     console.log('Handling register with:', email, password);
+  
     if (password !== confirmPassword) {
       setLocalError('Passwords Do Not Match.');
       return;
     }
+  
     if (!email || !password) {
-      setLocalError('Please Fill In All Fields.'); 
+      setLocalError('Please Fill In All Fields.');
       return;
     }
-    dispatch(register(email, password));
+  
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to create a new account.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Register',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(register(email, password)); 
+        Swal.fire('Success!', 'Your account has been created successfully.', 'success');
+      } else {
+        Swal.fire('Cancelled', 'Your registration has been cancelled.', 'info');
+      }
+    });
   };
+  
   
   useEffect(() => {
     if (currentUser) {
