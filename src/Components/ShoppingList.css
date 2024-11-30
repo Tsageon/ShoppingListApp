@@ -179,6 +179,25 @@ body {
   background-color: white;
 }
 
+.sort-label {
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.sort-select {
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 88%;
+}
+
+.sort-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
 .item-card {
   display: flex;
   flex-direction: row;
